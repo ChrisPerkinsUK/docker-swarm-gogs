@@ -1,0 +1,35 @@
+version: '3.3'
+
+services:
+
+  gogs:
+    image: gogs/gogs:latest
+    env_file:
+      - ./envars/postgres.env
+    hostname: gogs.chris-perkins.uk
+    ports:
+      - "10022:22"
+      - "10080:3000"
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data
+    networks:
+      - gogsnet
+
+  postgres:
+    image: postgres:10.5-alpine
+    volumes:
+      - type: volume
+        source: postgres_data
+        target: /var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - gogsnet
+
+networks: 
+  gogsnet:
+
+volumes:
+  postgres_data:
